@@ -17,9 +17,13 @@ namespace WebApplication2.Controllers
         }
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("test", "");
-            Debug.WriteLine("ok");
-            return Content(_context.Admins.Count().ToString());
+            UserEtablishment u = new UserEtablishment();
+            u.etablishmentID = 8;
+            u.userID = 1;
+            _context.Add(u);
+            _context.SaveChanges();
+            
+            return Content(_context.user.Where(s => s.accountTypeID == 1).Count().ToString());
         }
 
         public IActionResult About()
@@ -44,7 +48,7 @@ namespace WebApplication2.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View("home");
         }
     }
 }
