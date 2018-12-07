@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication2.Models;
+using Microsoft.AspNetCore.Http;
 using AppContext = WebApplication2.Models.AppContext;
 
 namespace WebApplication2.Controllers
@@ -14,10 +12,12 @@ namespace WebApplication2.Controllers
         private readonly AppContext _context;
         public HomeController(AppContext context)
         {
+             
             _context = context;
         }
         public IActionResult Index()
         {
+            HttpContext.Session.SetString("test", "");
             Debug.WriteLine("ok");
             return Content(_context.Admins.Count().ToString());
         }

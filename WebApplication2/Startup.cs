@@ -35,6 +35,8 @@ namespace WebApplication2
             });
             services.AddDbContext<AppContext>(optionsq =>
             optionsq.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -43,6 +45,7 @@ namespace WebApplication2
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseSession()
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
