@@ -7,9 +7,13 @@ namespace WebApplication2.Models
     {
         public AppContext(DbContextOptions builder) : base(builder) { }
         public DbSet<AccountType> accountTypes { get; set; }
-        public DbSet<Etablishment> etablishments { get; set; }
+        public DbSet<Etablishment> etablishment { get; set; }
         public DbSet<UserEtablishment> userEtablishment { get; set; }
+        public DbSet<Chamber> chamber { get; set; }
         public DbSet<User> user { get; set; }
+        public DbSet<Comment> comment { get; set; }
+        public DbSet<EtablishmentType> etablishmentType { get; set; }
+        public DbSet<Rating> rating { get; set; }
 
         protected override void OnModelCreating(ModelBuilder model)
         {

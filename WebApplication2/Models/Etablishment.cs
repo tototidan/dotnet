@@ -16,5 +16,7 @@ namespace WebApplication2.Models
         public string phonenumber { get; set; }
         public string email { get; set; }
         public int average { get; set; }
+        public int etablishmenttypeID { get; set; }
+        public virtual EtablishmentType etablishmentType { get; set; }
     }
 }
