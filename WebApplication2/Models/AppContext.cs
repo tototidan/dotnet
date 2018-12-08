@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace WebApplication2.Models
 {
@@ -16,9 +13,9 @@ namespace WebApplication2.Models
 
         protected override void OnModelCreating(ModelBuilder model)
         {
-            model.Entity<UserEtablishment>().HasKey(f => new { f.etablishmentID, f.userID });
+            model.Entity<UserEtablishment>().HasKey(f => new {f.etablishmentID, f.userID });
             model.Entity<User>().HasOne<AccountType>(s => s.AccountType);
-            
+            model.Entity<Rating>().HasKey(f => new { f.etablishmentID, f.userID });
         }
     }
     

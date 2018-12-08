@@ -17,13 +17,9 @@ namespace WebApplication2.Controllers
         }
         public IActionResult Index()
         {
-            UserEtablishment u = new UserEtablishment();
-            u.etablishmentID = 8;
-            u.userID = 1;
-            _context.Add(u);
-            _context.SaveChanges();
             
-            return Content(_context.user.Where(s => s.accountTypeID == 1).Count().ToString());
+            
+            return View();
         }
 
         public IActionResult About()
