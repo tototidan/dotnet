@@ -15,12 +15,10 @@ namespace WebApplication2.Models
         public virtual AccountType AccountType { get; set; }
 
         [Required]
-        [Display(Name = "Identifiant")]
         public string Login { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Mot de passe")]
         public string Password { get; set; }
 
     }

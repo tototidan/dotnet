@@ -9,14 +9,12 @@ namespace WebApplication2.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Login",
                 table: "user",
-                nullable: false,
-                defaultValue: "");
+                nullable: false);
 
             migrationBuilder.AddColumn<string>(
                 name: "Password",
                 table: "user",
-                nullable: false,
-                defaultValue: "");
+                nullable: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
