@@ -17,13 +17,7 @@ namespace WebApplication2.Controllers
         }
         public IActionResult Index()
         {
-            string t = "";
-            var test = _context.etablishment.Where(s => s.etablishmenttypeID == 2).OrderByDescending(x => x.average).Select(s => new { s.name, s.phonenumber, s.etablishmentType.type }).Take(5).ToList();
-            foreach(var test2 in test)
-            {
-                t += test2.ToString();
-            }
-            return Content(t);
+            return View();
         }
 
         public IActionResult About()

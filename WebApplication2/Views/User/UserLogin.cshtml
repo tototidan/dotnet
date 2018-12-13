@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "UserLogin";
+}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="container">
+        <form method="post" action="/User/CheckUser">
+            <h2>Se connecter</h2>
+            <label for="inputUsername">Nom d'utilisateur</label>
+            <input type="text" name="username" id="inputUsername" placeholder="Nom d'utilisateur ... ">
+            <br />
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword" placeholder="Mot de passe ...">
+            <br />
+            <span style="color:red">
+                @if (ViewBag.Error != null && (bool)ViewBag.Error == true)
+                {
+                    @Html.Raw("Mot de passe érroné")
+                }
+            </span>
+            <br />
+            <button type="submit">Connexion</button>
+        </form>
+    </div>
+</body>
+</html>
+
