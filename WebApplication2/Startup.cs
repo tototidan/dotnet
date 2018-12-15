@@ -36,7 +36,11 @@ namespace WebApplication2
             services.AddDbContext<AppContext>(optionsq =>
             optionsq.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.Cookie.HttpOnly = true;
+            });
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
