@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using AppContext = WebApplication2.Models.AppContext;
-//test
+// User controler
 namespace WebApplication2.Controllers
 {
     public class UserController : Controller
