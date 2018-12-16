@@ -12,13 +12,11 @@ namespace WebApplication2.Controllers
         private readonly AppContext _context;
         public HomeController(AppContext context)
         {
-            
+             
             _context = context;
         }
         public IActionResult Index()
         {
-            HttpContext.Session.SetInt32("userTypeAccount", 1);
-            HttpContext.Session.SetInt32("userID", 2);
             return View();
         }
 

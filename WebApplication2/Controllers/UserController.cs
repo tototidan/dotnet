@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using AppContext = WebApplication2.Models.AppContext;
 
 namespace WebApplication2.Controllers
@@ -17,12 +18,28 @@ namespace WebApplication2.Controllers
         [AllowAnonymous]
         public IActionResult UserLogin()
         {
+            if (HttpContext.Session.GetInt32("userId") != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
+
+        public IActionResult UserLogout()
+        {
+            if (HttpContext.Session.GetInt32("userId") != null)
+            {
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         [HttpPost]
         public ActionResult CheckUser(string username, string password)
         {
+
             var user = (from us in _context.user
                         where string.Compare(username, us.Login, StringComparison.OrdinalIgnoreCase) == 0
                         && string.Compare(password, us.Password, StringComparison.OrdinalIgnoreCase) == 0
@@ -30,14 +47,16 @@ namespace WebApplication2.Controllers
 
             if (user != null)
             {
+                HttpContext.Session.SetInt32("userId", user.userID);
+                HttpContext.Session.SetString("username", user.Login);
+
                 return RedirectToAction("Success");
             }
             else
             {
-                return RedirectToAction("UserLogin", new { error = true });
+                ViewBag.Error = true;
+                return RedirectToAction("UserLogin");
             }
-
-            //Content(_context.user.Where(s => s.accountTypeID == 1).Count().ToString())
 
 
         }
@@ -48,5 +67,47 @@ namespace WebApplication2.Controllers
             return View();
 
         }
+
+        public ActionResult Disconnect()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public ActionResult UserRegister()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateUser(string login, string password, string passwordRepeat)
+        {
+            if (login != null && password != null && passwordRepeat != null)
+            {
+                if (password == passwordRepeat)
+                {
+                    _context.user.Add(new Models.User {
+                       Login = login,
+                       Password = password,
+                       accountTypeID = 1
+                    });
+
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Success");
+
+                }
+                else
+                {
+                    return RedirectToAction("UserRegister");
+                }
+            }
+            else
+            {
+                return RedirectToAction("UserRegister");
+            }
+        }
+
     }
 }

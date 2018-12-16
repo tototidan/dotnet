@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Models;
 using Microsoft.AspNetCore.Http;
-using System.Web;
 using AppContext = WebApplication2.Models.AppContext;
 
 namespace WebApplication2.Controllers
@@ -24,6 +23,14 @@ namespace WebApplication2.Controllers
         }
 
         //TODO: Create index with the list of etablishment of the user
+        // GET: Etablishments1
+        public async Task<IActionResult> Index()
+        {
+            var appContext = _context.etablishment.Include(e => e.etablishmentType).
+                Where(s=> s.userEtablishment.userID == HttpContext.Session.GetInt32("userID"));
+            return View(await appContext.ToListAsync());
+        }
+
 
         // GET: Etablishments/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -35,7 +42,7 @@ namespace WebApplication2.Controllers
             try
             {
                 var etablishment = await _context.etablishment
-               .Include(e => e.etablishmentType)
+               .Include(e => e.etablishmentType).Include(e => e.userEtablishment)
                .FirstOrDefaultAsync(m => m.etablishmentID == id);
                 if (etablishment == null)
                 {

@@ -1,6 +1,7 @@
 ﻿@model WebApplication2.Models.Etablishment
 
 @{
+    @using Microsoft.AspNetCore.Http;
     ViewData["Title"] = "Details";
 }
 
@@ -60,7 +61,22 @@
         </dd>
     </dl>
 </div>
+
+<form method="POST" asp-antiforgery="true" action="@Url.Action("Create", "Comments")">
+    <input name="etablishmentID" value="1" />
+   
+    <input name="comment" value="Salut" />
+    <input name="rating" value="4" />
+
+    <input type="submit" />
+</form>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.etablishmentID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <!-- if user is not the owner of the etablishment, do not display edit and back to list-->
+    @if ((int)Context.Session.GetInt32("userID") == Model.userEtablishment.userID)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.etablishmentID">Edit</a>
+        <a asp-action="Index">Back to List</a>
+    }
+
+
 </div>

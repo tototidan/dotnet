@@ -8,6 +8,11 @@ namespace WebApplication2.Models
     public class Comment
     {
         public int commentID { get; set; }
+        public int rating { get; set; }
         public string comment { get; set; }
+        public int userID { get; set; }
+        public int etablishmentID { get; set; }
+        public virtual User user { get; set; }
+        public virtual Etablishment etablishment { get; set; }
     }
 }

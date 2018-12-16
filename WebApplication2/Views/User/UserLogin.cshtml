@@ -19,7 +19,7 @@
             <input type="password" name="password" id="inputPassword" placeholder="Mot de passe ...">
             <br />
             <span style="color:red">
-                @if (ViewBag.Error != null && (bool)ViewBag.Error == true)
+                @if (ViewBag.Error != null)
                 {
                     @Html.Raw("Mot de passe érroné")
                 }

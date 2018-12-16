@@ -13,13 +13,13 @@ namespace WebApplication2.Models
         public DbSet<User> user { get; set; }
         public DbSet<Comment> comment { get; set; }
         public DbSet<EtablishmentType> etablishmentType { get; set; }
-        public DbSet<Rating> rating { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder model)
         {
             model.Entity<UserEtablishment>().HasKey(f => new {f.etablishmentID, f.userID });
             model.Entity<User>().HasOne<AccountType>(s => s.AccountType);
-            model.Entity<Rating>().HasKey(f => new { f.etablishmentID, f.userID });
+            model.Entity<Comment>().HasKey(f => new { f.etablishmentID, f.userID });
         }
     }
     
