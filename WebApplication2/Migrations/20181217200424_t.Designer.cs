@@ -8,8 +8,8 @@ using WebApplication2.Models;
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(AppContext))]
-    [Migration("20181216214454_mi")]
-    partial class mi
+    [Migration("20181217200424_t")]
+    partial class t
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,8 +49,6 @@ namespace WebApplication2.Migrations
                     b.Property<int>("userID");
 
                     b.Property<string>("comment");
-
-                    b.Property<int>("commentID");
 
                     b.Property<int>("rating");
 

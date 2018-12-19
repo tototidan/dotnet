@@ -48,7 +48,16 @@ namespace WebApplication2.Controllers
                 {
                     return RedirectToAction("index", "home");
                 }
-
+                try
+                {
+                    var t = _context.comment.Where(s => s.etablishmentID == id).ToList();
+                    ViewData["comment"] = t;
+                }
+                catch(Exception)
+                {
+                    //Nothing to do
+                }
+                
                 return View(etablishment);
             }
             catch(Exception)
@@ -170,6 +179,7 @@ namespace WebApplication2.Controllers
         // GET: Etablishments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            return Content("ok");
             if (id == null)
             {
                 return NotFound();

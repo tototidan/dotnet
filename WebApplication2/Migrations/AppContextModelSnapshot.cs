@@ -48,8 +48,6 @@ namespace WebApplication2.Migrations
 
                     b.Property<string>("comment");
 
-                    b.Property<int>("commentID");
-
                     b.Property<int>("rating");
 
                     b.HasKey("etablishmentID", "userID");

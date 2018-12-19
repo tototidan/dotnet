@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Models;
+using Microsoft.AspNetCore.Http;
 using AppContext = WebApplication2.Models.AppContext;
 
 namespace WebApplication2.Controllers
@@ -21,112 +22,62 @@ namespace WebApplication2.Controllers
 
         
 
-        
-
         // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("rating,comment,etablishmentID")] Comment comment)
+        public async Task<IActionResult> Create([Bind("rating,comment,etablishmentID")] Comment pComment)
         {
-            if (ModelState.IsValid)
-            {
-                
-                comment.userID = 1;
-                _context.Add(comment);
-                await _context.SaveChangesAsync();
-                return Content("ok");
-            }
-            ViewData["etablishmentID"] = new SelectList(_context.etablishment, "etablishmentID", "description", comment.etablishmentID);
-            ViewData["userID"] = new SelectList(_context.user, "userID", "Login", comment.userID);
-            return View(comment);
-        }
-
-        // GET: Comments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.comment.FindAsync(id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-            ViewData["etablishmentID"] = new SelectList(_context.etablishment, "etablishmentID", "description", comment.etablishmentID);
-            ViewData["userID"] = new SelectList(_context.user, "userID", "Login", comment.userID);
-            return View(comment);
-        }
-
-        // POST: Comments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("commentID,rating,comment,userID,etablishmentID")] Comment comment)
-        {
-            if (id != comment.etablishmentID)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(comment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CommentExists(comment.etablishmentID))
+                    pComment.userID = (int)HttpContext.Session.GetInt32("userID");
+                    var t = _context.comment.Where(s => s.etablishmentID == pComment.etablishmentID && s.userID == (int)HttpContext.Session.GetInt32("userID")).FirstOrDefault();
+                    if ( t != null)
                     {
-                        return NotFound();
+                        t.rating = pComment.rating;
+                        t.comment = pComment.comment;
+                        _context.Update(t);
                     }
                     else
                     {
-                        throw;
+                        _context.Add(pComment);
                     }
+                    await _context.SaveChangesAsync();
+                 
+                    return RedirectToAction("Details", "Etablishments", new { id = pComment.etablishmentID });
                 }
-                return RedirectToAction();
+                catch(Exception e)
+                {
+                   
+                    return RedirectToAction("Details", "Etablishments", new { id = pComment.etablishmentID });
+                }
             }
-            ViewData["etablishmentID"] = new SelectList(_context.etablishment, "etablishmentID", "description", comment.etablishmentID);
-            ViewData["userID"] = new SelectList(_context.user, "userID", "Login", comment.userID);
-            return View(comment);
+            return RedirectToAction("Details", "Etablishments", new { id = pComment.etablishmentID });
+
+
         }
+       
 
-        // GET: Comments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.comment
-                .Include(c => c.etablishment)
-                .Include(c => c.user)
-                .FirstOrDefaultAsync(m => m.etablishmentID == id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            return View(comment);
-        }
-
-        // POST: Comments/Delete/5
+         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed([Bind("etablishmentID")] Comment pComment)
         {
-            var comment = await _context.comment.FindAsync(id);
-            _context.comment.Remove(comment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction();
+            try
+            {
+                var comment = await _context.comment.Where(s => s.userID == HttpContext.Session.GetInt32("userID") && s.etablishmentID == pComment.etablishmentID).FirstAsync();
+                _context.comment.Remove(comment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Etablishments", new { id = pComment.etablishmentID });
+            }
+            catch(Exception)
+            {
+                return RedirectToAction("Details", "Etablishments", new { id = pComment.etablishmentID });
+            }
+            
         }
 
         private bool CommentExists(int id)

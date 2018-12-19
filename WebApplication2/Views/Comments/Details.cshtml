@@ -1,0 +1,42 @@
+﻿@model WebApplication2.Models.Comment
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Comment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.rating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.rating)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.comment)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.comment)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.user)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.user.Login)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.etablishment)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.etablishment.description)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

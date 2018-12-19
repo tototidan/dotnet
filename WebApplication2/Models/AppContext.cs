@@ -20,6 +20,7 @@ namespace WebApplication2.Models
             model.Entity<UserEtablishment>().HasKey(f => new {f.etablishmentID, f.userID });
             model.Entity<User>().HasOne<AccountType>(s => s.AccountType);
             model.Entity<Comment>().HasKey(f => new { f.etablishmentID, f.userID });
+            
         }
     }
     

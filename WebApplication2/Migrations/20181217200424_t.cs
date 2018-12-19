@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication2.Migrations
 {
-    public partial class CreationModel : Migration
+    public partial class t : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,19 +17,6 @@ namespace WebApplication2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_accountTypes", x => x.accountTypeID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "comment",
-                columns: table => new
-                {
-                    commentID = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    comment = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_comment", x => x.commentID);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,7 +38,9 @@ namespace WebApplication2.Migrations
                 {
                     userID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    accountTypeID = table.Column<int>(nullable: false)
+                    accountTypeID = table.Column<int>(nullable: false),
+                    Login = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,10 +59,10 @@ namespace WebApplication2.Migrations
                 {
                     etablishmentID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(nullable: true),
-                    description = table.Column<string>(nullable: true),
-                    street = table.Column<string>(nullable: true),
-                    postalcode = table.Column<string>(nullable: true),
+                    name = table.Column<string>(nullable: false),
+                    description = table.Column<string>(nullable: false),
+                    street = table.Column<string>(nullable: false),
+                    postalcode = table.Column<string>(nullable: false),
                     phonenumber = table.Column<string>(nullable: true),
                     email = table.Column<string>(nullable: true),
                     average = table.Column<int>(nullable: false),
@@ -110,31 +99,25 @@ namespace WebApplication2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "rating",
+                name: "comment",
                 columns: table => new
                 {
-                    userID = table.Column<int>(nullable: false),
-                    etablishmentID = table.Column<int>(nullable: false),
                     rating = table.Column<int>(nullable: false),
-                    commentID = table.Column<int>(nullable: false)
+                    comment = table.Column<string>(nullable: true),
+                    userID = table.Column<int>(nullable: false),
+                    etablishmentID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_rating", x => new { x.etablishmentID, x.userID });
+                    table.PrimaryKey("PK_comment", x => new { x.etablishmentID, x.userID });
                     table.ForeignKey(
-                        name: "FK_rating_comment_commentID",
-                        column: x => x.commentID,
-                        principalTable: "comment",
-                        principalColumn: "commentID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_rating_etablishment_etablishmentID",
+                        name: "FK_comment_etablishment_etablishmentID",
                         column: x => x.etablishmentID,
                         principalTable: "etablishment",
                         principalColumn: "etablishmentID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_rating_user_userID",
+                        name: "FK_comment_user_userID",
                         column: x => x.userID,
                         principalTable: "user",
                         principalColumn: "userID",
@@ -171,24 +154,25 @@ namespace WebApplication2.Migrations
                 column: "etablishmentID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_comment_userID",
+                table: "comment",
+                column: "userID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_etablishment_etablishmenttypeID",
                 table: "etablishment",
                 column: "etablishmenttypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_rating_commentID",
-                table: "rating",
-                column: "commentID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_rating_userID",
-                table: "rating",
-                column: "userID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_user_accountTypeID",
                 table: "user",
                 column: "accountTypeID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_userEtablishment_etablishmentID",
+                table: "userEtablishment",
+                column: "etablishmentID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_userEtablishment_userID",
@@ -202,13 +186,10 @@ namespace WebApplication2.Migrations
                 name: "chamber");
 
             migrationBuilder.DropTable(
-                name: "rating");
+                name: "comment");
 
             migrationBuilder.DropTable(
                 name: "userEtablishment");
-
-            migrationBuilder.DropTable(
-                name: "comment");
 
             migrationBuilder.DropTable(
                 name: "etablishment");

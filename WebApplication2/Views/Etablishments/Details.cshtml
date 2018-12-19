@@ -1,8 +1,23 @@
 ﻿@model WebApplication2.Models.Etablishment
-
+@using Microsoft.AspNetCore.Http;
 @{
-    @using Microsoft.AspNetCore.Http;
+
+
     ViewData["Title"] = "Details";
+    var test = (List<Comment>)ViewData["comment"];
+    Comment toto = null;
+    try
+    {
+        toto = test.Find(x => x.userID == Context.Session.GetInt32("userID"));
+        test.Remove(toto);
+        
+    }
+    catch(Exception)
+    {
+       
+    }
+
+
 }
 
 <h2>Details</h2>
@@ -62,13 +77,24 @@
     </dl>
 </div>
 
-<form method="POST" asp-antiforgery="true" action="@Url.Action("Create", "Comments")">
-    <input name="etablishmentID" value="1" />
-   
-    <input name="comment" value="Salut" />
-    <input name="rating" value="4" />
 
-    <input type="submit" />
+<form method="POST" asp-antiforgery="true" action="@Url.Action("Create", "Comments")">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+
+        <input name="rating" class="form-control" />
+
+    </div>
+    <div class="form-group">
+        <input value="comment" name="comment" class="form-control" />
+
+    </div>
+    <div class="form-group">
+        <input name="etablishmentID" value="@Model.etablishmentID" type="hidden" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-default" />
+    </div>
 </form>
 <div>
     <!-- if user is not the owner of the etablishment, do not display edit and back to list-->
@@ -77,6 +103,30 @@
         <a asp-action="Edit" asp-route-id="@Model.etablishmentID">Edit</a>
         <a asp-action="Index">Back to List</a>
     }
+    @if (toto != null)
+    {
+        <p>Mon commentaire</p>
+        @toto.comment
+        @toto.rating
+        
+        <form asp-antiforgery="true" action="@Url.Action("Delete","Comments")/@toto.userID" method="post">
+            <input type="hidden" name="etablishmentID" value="@toto.etablishmentID" />
+            <input type="submit" value="Delete" class="btn btn-default" /> 
+        </form>
+    }
+    <br />
+    <br />
+    <br />
+    <br />
+
+    @for (var i = 0; i < test.Count; i++)
+    {
+        <br />
+        <p>Commentaire autre utilisateurs</p>
+        @test[i].comment
+        @test[i].rating
+    }
+
 
 
 </div>

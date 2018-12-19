@@ -17,6 +17,7 @@ namespace WebApplication2.Controllers
         }
         public IActionResult Index()
         {
+            HttpContext.Session.SetInt32("userID",1);
             return View();
         }
 
