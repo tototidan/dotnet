@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication2.Models;
 using Microsoft.AspNetCore.Http;
 using AppContext = WebApplication2.Models.AppContext;
+using System.Collections.Generic;
 
 namespace WebApplication2.Controllers
 {
@@ -12,11 +13,18 @@ namespace WebApplication2.Controllers
         private readonly AppContext _context;
         public HomeController(AppContext context)
         {
-             
+
             _context = context;
         }
         public IActionResult Index()
         {
+            IList<Etablishment> hotellist = new List<Etablishment>();
+            hotellist.Add(new Etablishment() { name = "toto", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+            hotellist.Add(new Etablishment() { name = "tota", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+            hotellist.Add(new Etablishment() { name = "toti", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+            hotellist.Add(new Etablishment() { name = "toti", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+
+            ViewData["hotels"] = hotellist;
             return View();
         }
 

@@ -13,4 +13,10 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\images\img.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\images\img.jpg" />
+  </ItemGroup>
 </Project>
