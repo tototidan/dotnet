@@ -39,9 +39,10 @@
 
                     @if (Context.Session.GetString("username") != null)
                     {
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">@Context.Session.GetString("username")</a></li>
+                        <li><a asp-area="" asp-controller="User" asp-action="UserDetails">@Context.Session.GetString("username")</a></li>
                         <li><a asp-area="" asp-controller="User" asp-action="UserLogout">Logout</a></li>
                         <li><a asp-area="" asp-controller="Reservations" asp-action="Index">Mes réservations</a></li>
+                        <li><a asp-area="" asp-controller="Etablishments" asp-action="Index">Listes hôtels</a></li>
 
                     }
                     else

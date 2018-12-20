@@ -27,7 +27,7 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Index()
         {
             var appContext = _context.etablishment.Include(e => e.etablishmentType).
-                Where(s=> s.userEtablishment.userID == HttpContext.Session.GetInt32("userID"));
+                Where(s=> s.userEtablishment.userID == HttpContext.Session.GetInt32("userId"));
             return View(await appContext.ToListAsync());
         }
 
@@ -93,9 +93,9 @@ namespace WebApplication2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("name,description,street,postalcode,phonenumber,email,etablishmenttypeID")] Etablishment etablishment)
+        public async Task<IActionResult> Create([Bind("name,description,street,postalcode,phonenumber,email,etablishmenttypeID,img")] Etablishment etablishment)
         {
-            if (ModelState.IsValid && HttpContext.Session.GetInt32("userID") != null)
+            if (ModelState.IsValid && HttpContext.Session.GetInt32("userId") != null)
             {  
                 try
                 {
@@ -103,7 +103,7 @@ namespace WebApplication2.Controllers
                     _context.SaveChanges();
                     UserEtablishment u = new UserEtablishment();
                     u.etablishmentID = etablishment.etablishmentID;
-                    u.userID = (int)HttpContext.Session.GetInt32("userID");
+                    u.userID = (int)HttpContext.Session.GetInt32("userId");
                     _context.Add(u);
                     _context.SaveChanges();
                     ViewData["msg"] = "salut";
@@ -130,7 +130,7 @@ namespace WebApplication2.Controllers
 
             try
             {
-                var t = _context.etablishment.Where(s => s.userEtablishment.etablishmentID == id && s.userEtablishment.userID == HttpContext.Session.GetInt32("userID"))
+                var t = _context.etablishment.Where(s => s.userEtablishment.etablishmentID == id && s.userEtablishment.userID == HttpContext.Session.GetInt32("userId"))
                     .First();
                 if (t == null)
                 {
@@ -152,7 +152,7 @@ namespace WebApplication2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("etablishmentID,name,description,street,postalcode,phonenumber,email,etablishmenttypeID")] Etablishment etablishment)
+        public async Task<IActionResult> Edit(int id, [Bind("etablishmentID,name,description,street,postalcode,phonenumber,email,etablishmenttypeID,img")] Etablishment etablishment)
         {
             if (id != etablishment.etablishmentID)
             {
@@ -164,7 +164,7 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    if(_context.etablishment.Any(s=> s.userEtablishment.etablishmentID == id && s.userEtablishment.userID == HttpContext.Session.GetInt32("userID")))
+                    if(_context.etablishment.Any(s=> s.userEtablishment.etablishmentID == id && s.userEtablishment.userID == HttpContext.Session.GetInt32("userId")))
                     {
                         _context.Update(etablishment);
                         await _context.SaveChangesAsync();
@@ -202,7 +202,7 @@ namespace WebApplication2.Controllers
             {
                 var etablishment = await _context.etablishment
                 .Include(e => e.etablishmentType)
-                .Where(s => s.userEtablishment.userID == HttpContext.Session.GetInt32("userID") && s.userEtablishment.etablishmentID == id).FirstAsync();
+                .Where(s => s.userEtablishment.userID == HttpContext.Session.GetInt32("userId") && s.userEtablishment.etablishmentID == id).FirstAsync();
                 return View(etablishment);
             }
             catch(Exception )
@@ -220,7 +220,7 @@ namespace WebApplication2.Controllers
         {
             try
             {
-                var etablishment = await _context.etablishment.Where(e => e.userEtablishment.etablishmentID == id && e.userEtablishment.userID == HttpContext.Session.GetInt32("userID"))
+                var etablishment = await _context.etablishment.Where(e => e.userEtablishment.etablishmentID == id && e.userEtablishment.userID == HttpContext.Session.GetInt32("userId"))
                     .FirstAsync();
                 if (etablishment == null)
                 {

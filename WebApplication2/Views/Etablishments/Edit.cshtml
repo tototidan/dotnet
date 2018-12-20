@@ -34,6 +34,13 @@
                 <span asp-validation-for="postalcode" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <select name="img">
+                    <option value="image1.svg">image 1</option>
+                    <option value="image2.svg">image 2</option>
+                    <option value="image3.svg">image 3</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label asp-for="phonenumber" class="control-label"></label>
                 <input asp-for="phonenumber" class="form-control" />
                 <span asp-validation-for="phonenumber" class="text-danger"></span>
@@ -42,11 +49,6 @@
                 <label asp-for="email" class="control-label"></label>
                 <input asp-for="email" class="form-control" />
                 <span asp-validation-for="email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="average" class="control-label"></label>
-                <input asp-for="average" class="form-control" />
-                <span asp-validation-for="average" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="etablishmenttypeID" class="control-label"></label>

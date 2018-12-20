@@ -17,6 +17,7 @@ namespace WebApplication2.Models
         public string street { get; set; }
         [Required]
         public string postalcode { get; set; }
+        public string img { get; set; }
         public int nbChamber { get; set; }
         public string phonenumber { get; set; }
         public string email { get; set; }

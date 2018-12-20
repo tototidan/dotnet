@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using AppContext = WebApplication2.Models.AppContext;
 using System.Data;
+using System.Text;
 
 // User controler
 namespace WebApplication2.Controllers
@@ -42,10 +43,10 @@ namespace WebApplication2.Controllers
         [HttpPost]
         public ActionResult CheckUser(string username, string password)
         {
-
+            
             var user = (from us in _context.user
                         where string.Compare(username, us.Login, StringComparison.OrdinalIgnoreCase) == 0
-                        && string.Compare(password, us.Password, StringComparison.OrdinalIgnoreCase) == 0
+                        && string.Compare(Hash(password), us.Password, StringComparison.OrdinalIgnoreCase) == 0
                         select us).FirstOrDefault();
 
             if (user != null)
@@ -86,13 +87,15 @@ namespace WebApplication2.Controllers
         [HttpPost]
         public ActionResult CreateUser(string login, string password, string passwordRepeat)
         {
+            
+            
             if (login != null && password != null && passwordRepeat != null)
             {
                 if (password == passwordRepeat)
                 {
                     _context.user.Add(new Models.User {
                        Login = login,
-                       Password = password,
+                       Password = Hash(password),
                        accountTypeID = 1
                     });
 
@@ -124,12 +127,13 @@ namespace WebApplication2.Controllers
         [HttpPost]
         public ActionResult EditUser(string login, string password, string passwordRepeat)
         {
-            if(password !=null){
+            
+            if (password !=null){
                 if (password == passwordRepeat)
                     {
                         var userId = HttpContext.Session.GetInt32("userId");
                         var pass = _context.user.First(a => a.userID == userId);
-                        pass.Password = password;
+                        pass.Password = Hash(password);
                         _context.SaveChanges();
                         TempData["SuccessMessage"] = "Your success message here";
                         
@@ -140,6 +144,13 @@ namespace WebApplication2.Controllers
             
 
 
+        }
+
+        public string Hash(string password)
+        {
+            var bytes = new UTF8Encoding().GetBytes(password);
+            var hashBytes = System.Security.Cryptography.MD5.Create().ComputeHash(bytes);
+            return Convert.ToBase64String(hashBytes);
         }
 
     }

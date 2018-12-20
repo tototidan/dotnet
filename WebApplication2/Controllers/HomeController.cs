@@ -19,11 +19,12 @@ namespace WebApplication2.Controllers
         public IActionResult Index()
         {
 
-            IList<Etablishment> hotellist = new List<Etablishment>();
-            hotellist.Add(new Etablishment() { name = "toto", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
-            hotellist.Add(new Etablishment() { name = "tota", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
-            hotellist.Add(new Etablishment() { name = "toti", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
-            hotellist.Add(new Etablishment() { name = "toti", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+            //IList<Etablishment> hotellist = new List<Etablishment>();
+            //hotellist.Add(new Etablishment() { name = "toto", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+            //hotellist.Add(new Etablishment() { name = "tota", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+            //hotellist.Add(new Etablishment() { name = "toti", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+            //hotellist.Add(new Etablishment() { name = "toti", postalcode = "75000", street = "34 avenue paris", description = "hotel 5 etoiles" });
+            var hotellist = _context.etablishment.ToList();
             ViewData["hotels"] = hotellist;
             return View();
         }
