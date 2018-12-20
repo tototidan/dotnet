@@ -109,5 +109,14 @@ namespace WebApplication2.Controllers
             }
         }
 
+        //[Authorize]
+        //[HttpPost]
+        public ActionResult UserDetails()
+        {
+            var userId = HttpContext.Session.GetInt32("userId");
+            var user = (from cust in _context.user where cust.userID == userId select cust);
+            return View();
+        }
+
     }
 }

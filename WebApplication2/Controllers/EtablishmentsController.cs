@@ -23,7 +23,7 @@ namespace WebApplication2.Controllers
         }
 
         //TODO: Create index with the list of etablishment of the user
-        // GET: Etablishments1
+        // GET: Etablishments
         public async Task<IActionResult> Index()
         {
             var appContext = _context.etablishment.Include(e => e.etablishmentType).
@@ -31,12 +31,22 @@ namespace WebApplication2.Controllers
             return View(await appContext.ToListAsync());
         }
 
+        //TODO: Create index with the list of etablishment of the user
+        // GET: Etablishments
+        public async Task<IActionResult> IndexAll()
+        {
+            var appContext = _context.etablishment.Include(e => e.etablishmentType).Where(s=> s.etablishmentID > 0);
+            return View("index",await appContext.ToListAsync());
+        }
+
+
 
         // GET: Etablishments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
+                
                 return RedirectToAction("index", "home");
             }
             try
@@ -46,22 +56,25 @@ namespace WebApplication2.Controllers
                .FirstOrDefaultAsync(m => m.etablishmentID == id);
                 if (etablishment == null)
                 {
+                    
                     return RedirectToAction("index", "home");
                 }
                 try
                 {
                     var t = _context.comment.Where(s => s.etablishmentID == id).ToList();
+                  
                     ViewData["comment"] = t;
                 }
-                catch(Exception)
+                catch(Exception e)
                 {
-                    //Nothing to do
+                    
                 }
                 
                 return View(etablishment);
             }
-            catch(Exception)
+            catch(Exception e)
             {
+                
                 return RedirectToAction("index", "home");
             }
            
@@ -179,7 +192,7 @@ namespace WebApplication2.Controllers
         // GET: Etablishments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            return Content("ok");
+            
             if (id == null)
             {
                 return NotFound();

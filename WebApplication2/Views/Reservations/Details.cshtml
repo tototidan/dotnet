@@ -1,0 +1,36 @@
+﻿@model WebApplication2.Models.Reservation
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Reservation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.arrive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.arrive)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.depart)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.depart)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.etablishment)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.etablishment.description)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.reservationID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

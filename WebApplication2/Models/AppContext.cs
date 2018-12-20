@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebApplication2.Models;
 
 
 namespace WebApplication2.Models
@@ -22,6 +23,9 @@ namespace WebApplication2.Models
             model.Entity<Comment>().HasKey(f => new { f.etablishmentID, f.userID });
             
         }
+        
+
+        public DbSet<WebApplication2.Models.Reservation> Reservation { get; set; }
     }
     
 }

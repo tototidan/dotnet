@@ -33,8 +33,8 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    pComment.userID = (int)HttpContext.Session.GetInt32("userID");
-                    var t = _context.comment.Where(s => s.etablishmentID == pComment.etablishmentID && s.userID == (int)HttpContext.Session.GetInt32("userID")).FirstOrDefault();
+                    pComment.userID = (int)HttpContext.Session.GetInt32("userId");
+                    var t = _context.comment.Where(s => s.etablishmentID == pComment.etablishmentID && s.userID == (int)HttpContext.Session.GetInt32("userId")).FirstOrDefault();
                     if ( t != null)
                     {
                         t.rating = pComment.rating;
@@ -46,7 +46,7 @@ namespace WebApplication2.Controllers
                         _context.Add(pComment);
                     }
                     await _context.SaveChangesAsync();
-                 
+                    refreshRating(pComment.etablishmentID);
                     return RedirectToAction("Details", "Etablishments", new { id = pComment.etablishmentID });
                 }
                 catch(Exception e)
@@ -65,12 +65,13 @@ namespace WebApplication2.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed([Bind("etablishmentID")] Comment pComment)
-        {
+        { 
             try
             {
-                var comment = await _context.comment.Where(s => s.userID == HttpContext.Session.GetInt32("userID") && s.etablishmentID == pComment.etablishmentID).FirstAsync();
+                var comment = await _context.comment.Where(s => s.userID == HttpContext.Session.GetInt32("userId") && s.etablishmentID == pComment.etablishmentID).FirstAsync();
                 _context.comment.Remove(comment);
                 await _context.SaveChangesAsync();
+                refreshRating(pComment.etablishmentID);
                 return RedirectToAction("Details", "Etablishments", new { id = pComment.etablishmentID });
             }
             catch(Exception)
@@ -84,5 +85,22 @@ namespace WebApplication2.Controllers
         {
             return _context.comment.Any(e => e.etablishmentID == id);
         }
+
+        public async void refreshRating(int etablishmentID)
+        {
+            var et = _context.etablishment.Where(s => s.etablishmentID == 1).First();
+            var avg = _context.comment.Where(s => s.etablishmentID == 1);
+            int i = 0;
+            int compteur = 0;
+            foreach (var t in avg)
+            {
+                i += t.rating;
+                compteur++;
+            }
+            et.average = i / compteur;
+            _context.etablishment.Update(et);
+            _context.SaveChanges();
+        }
+            
     }
 }

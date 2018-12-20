@@ -14,7 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+
     <Folder Include="Migrations\" />
+    <Content Remove="wwwroot\images\img.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\images\img.jpg" />
   </ItemGroup>
 
 </Project>

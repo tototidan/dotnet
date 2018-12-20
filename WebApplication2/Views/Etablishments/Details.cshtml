@@ -6,15 +6,25 @@
     ViewData["Title"] = "Details";
     var test = (List<Comment>)ViewData["comment"];
     Comment toto = null;
+    var isConnected = false;
+    int userID = -1;
     try
     {
-        toto = test.Find(x => x.userID == Context.Session.GetInt32("userID"));
+        toto = test.Find(x => x.userID == Context.Session.GetInt32("userId"));
         test.Remove(toto);
+
         
+        if (Context.Session.GetInt32("userId") != null)
+        {
+
+            userID = (int)Context.Session.GetInt32("userId");
+            isConnected = true;
+        }
+
     }
-    catch(Exception)
+    catch (Exception)
     {
-       
+
     }
 
 
@@ -77,7 +87,8 @@
     </dl>
 </div>
 
-
+@if (isConnected)
+{
 <form method="POST" asp-antiforgery="true" action="@Url.Action("Create", "Comments")">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
@@ -96,36 +107,70 @@
         <input type="submit" value="Create" class="btn btn-default" />
     </div>
 </form>
+<form method="POST" asp-antiforgery="true" action="@Url.Action("Create","Reservations")">
+
+    <div class="form-group">
+       
+        <input name="arrive" class="form-control" />
+        
+    </div>
+    <div class="form-group">
+        
+        <input name="depart" class="form-control" />
+      
+    </div>
+    <div class="form-group">
+        <input name="etablishmentID" type="hidden" value="@Model.etablishmentID" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-default" />
+</form>
+}
 <div>
     <!-- if user is not the owner of the etablishment, do not display edit and back to list-->
-    @if ((int)Context.Session.GetInt32("userID") == Model.userEtablishment.userID)
-    {
-        <a asp-action="Edit" asp-route-id="@Model.etablishmentID">Edit</a>
-        <a asp-action="Index">Back to List</a>
+
+    @{
+        
+        try
+        {
+
+            if (isConnected && userID == Model.userEtablishment.userID)
+            {
+                
+                
+                <a asp-action="Edit" asp-route-id="@Model.etablishmentID">Edit</a>
+                <a asp-action="Index">Back to List</a>
+            }
+        }
+        catch (Exception)
+        {
+
+        }
+
     }
     @if (toto != null)
     {
         <p>Mon commentaire</p>
         @toto.comment
         @toto.rating
-        
+
         <form asp-antiforgery="true" action="@Url.Action("Delete","Comments")/@toto.userID" method="post">
             <input type="hidden" name="etablishmentID" value="@toto.etablishmentID" />
-            <input type="submit" value="Delete" class="btn btn-default" /> 
+            <input type="submit" value="Delete" class="btn btn-default" />
         </form>
     }
     <br />
     <br />
     <br />
     <br />
-
     @for (var i = 0; i < test.Count; i++)
-    {
+        {
         <br />
         <p>Commentaire autre utilisateurs</p>
         @test[i].comment
         @test[i].rating
-    }
+        }
+    
 
 
 
