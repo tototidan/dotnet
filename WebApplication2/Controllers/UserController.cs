@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using AppContext = WebApplication2.Models.AppContext;
+using System.Data;
+
 // User controler
 namespace WebApplication2.Controllers
 {
     public class UserController : Controller
     {
+
         private readonly AppContext _context;
         public UserController(AppContext context)
         {
@@ -109,13 +112,34 @@ namespace WebApplication2.Controllers
             }
         }
 
-        //[Authorize]
-        //[HttpPost]
+        
         public ActionResult UserDetails()
         {
             var userId = HttpContext.Session.GetInt32("userId");
-            var user = (from cust in _context.user where cust.userID == userId select cust);
+            var user = _context.user.Where(s => s.userID ==  HttpContext.Session.GetInt32("userId")).First();
+            ViewData["details"] = user;
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditUser(string login, string password, string passwordRepeat)
+        {
+            if(password !=null){
+                if (password == passwordRepeat)
+                    {
+                        var userId = HttpContext.Session.GetInt32("userId");
+                        var pass = _context.user.First(a => a.userID == userId);
+                        pass.Password = password;
+                        _context.SaveChanges();
+                        TempData["SuccessMessage"] = "Your success message here";
+                        
+
+                    }
+            }
+            return View("Success");
+            
+
+
         }
 
     }
